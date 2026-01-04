@@ -11,10 +11,6 @@ variable "AWS_SECRET_ACCESS_KEY" {
   description = "AWS Secret from TF Cloud Workspace Env"
   type        = string
 }
-variable "AWS_SESSION_TOKEN" {
-  description = "AWS Session Token from SSO"
-  type        = string
-}
 variable "ec2_key_pair" {
   description = "SSH Key"
   type = string
