@@ -58,7 +58,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   ip_protocol       = "tcp"
   to_port           = 80
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop" {
   security_group_id = aws_security_group.web-sg.id
   cidr_ipv4         = "174.78.176.18/32"
   from_port         = 5900
