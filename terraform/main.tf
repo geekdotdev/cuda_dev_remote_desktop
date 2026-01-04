@@ -200,9 +200,9 @@ resource "aws_instance" "public_linux" {
   #!/bin/bash -xe
   # yum install -y java-21-amazon-corretto-headless.x86_64 python3-3.9.16-1.amzn2023.0.2 python3-pip
 
-  # mkdir -p ${local.data-dir-base}
-  # mkfs.ext4 ${local.data-ebs-volume1}
-  # mount ${local.data-ebs-volume1} ${local.data-dir-base}
+  # mkdir -p local.data-dir-base
+  # mkfs.ext4 local.data-ebs-volume1
+  # mount local.data-ebs-volume1 local.data-dir-base
   
   # java -version
   EOL
