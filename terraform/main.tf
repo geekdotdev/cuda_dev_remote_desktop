@@ -10,6 +10,12 @@ data "aws_availability_zones" "available" {}
 
 data "aws_caller_identity" "current" {}
 
+locals {
+  # data-ebs-volume1 = "/dev/xvdb"
+  # data-dir-base = "/var/lib/s3-files"
+  user-ip = "192.80.1.42/32"
+
+}
 resource "aws_vpc" "main" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
@@ -21,9 +27,9 @@ resource "aws_vpc" "main" {
     Name = "main"
   }
 }
-resource "aws_vpc_security_group_ingress_rule" "eks_allow_ssh" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = ${local.user-ip}
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -60,10 +66,17 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop" {
   security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = "174.78.176.18/32"
+  cidr_ipv4         = ${local.user-ip}
   from_port         = 5900
   ip_protocol       = "tcp"
   to_port           = 5900
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop" {
+  security_group_id = aws_security_group.web-sg.id
+  cidr_ipv4         = ${local.user-ip}
+  from_port         = 3389
+  ip_protocol       = "tcp"
+  to_port           = 3389
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_ssl_out" {
@@ -171,11 +184,7 @@ resource "aws_iam_instance_profile" "public_instance_profile" {
   name = "public_instance_profile"
   role = aws_iam_role.public_instance_role.name
 }
-locals {
-  # data-ebs-volume1 = "/dev/xvdb"
-  # data-dir-base = "/var/lib/s3-files"
 
-}
 resource "aws_instance" "public_linux" {
   ami           = var.instance_ami
   availability_zone = "${var.aws_region}a"
@@ -205,5 +214,11 @@ resource "aws_instance" "public_linux" {
   # mount local.data-ebs-volume1 local.data-dir-base
   
   # java -version
+  apt update
+  apt-get install gnome-shell gnome-session
+  apt-get install gnome-remote-desktop
+  cp /usr/lib/systemd/user/gnome-remote-desktop.service /etc/systemd/system/
+  systemctl enable --now gnome-remote-desktop.service
+
   EOL
 }
