@@ -64,14 +64,14 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   ip_protocol       = "tcp"
   to_port           = 80
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop" {
+resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_vnc" {
   security_group_id = aws_security_group.web-sg.id
   cidr_ipv4         = local.user-ip
   from_port         = 5900
   ip_protocol       = "tcp"
   to_port           = 5900
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop" {
+resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_rdp" {
   security_group_id = aws_security_group.web-sg.id
   cidr_ipv4         = local.user-ip
   from_port         = 3389
