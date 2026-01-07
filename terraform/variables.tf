@@ -23,3 +23,7 @@ variable "ec2_instance_type" {
   description = "instance type"
   type = string
 }
+variable "user-cidr-ipv4" {
+  description = "CIDR block of users"
+  type = string
+}
