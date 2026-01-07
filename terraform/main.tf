@@ -13,7 +13,6 @@ data "aws_caller_identity" "current" {}
 locals {
   # data-ebs-volume1 = "/dev/xvdb"
   # data-dir-base = "/var/lib/s3-files"
-  user-ip = "192.80.1.42/32"
 
 }
 resource "aws_vpc" "main" {
@@ -29,7 +28,7 @@ resource "aws_vpc" "main" {
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.user-cidr-ipv4
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -66,14 +65,14 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_vnc" {
   security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.user-cidr-ipv4
   from_port         = 5900
   ip_protocol       = "tcp"
   to_port           = 5900
 }
 resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_rdp" {
   security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = var.user-cidr-ipv4
   from_port         = 3389
   ip_protocol       = "tcp"
   to_port           = 3389
