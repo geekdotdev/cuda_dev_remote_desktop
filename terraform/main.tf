@@ -214,8 +214,8 @@ resource "aws_instance" "public_linux" {
   
   # java -version
   apt update
-  apt-get install gnome-shell gnome-session
-  apt-get install gnome-remote-desktop
+  apt-get install -y gnome-shell gnome-session
+  apt-get install -y gnome-remote-desktop
   cp /usr/lib/systemd/user/gnome-remote-desktop.service /etc/systemd/system/
   systemctl enable --now gnome-remote-desktop.service
 
