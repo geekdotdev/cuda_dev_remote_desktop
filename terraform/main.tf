@@ -214,70 +214,10 @@ resource "aws_instance" "public_linux" {
   
   # java -version
   apt update
-  apt install -y systemd-container net-tools
-  # apt install -y ubuntu-gnome-desktop gdm3
-  apt install -y ubuntu-desktop-minimal gdm3
-  # lightdm slim
+  # apt install -y systemd-container net-tools
+  apt install -y ubuntu-desktop gdm3 mesa-utils
+  cat /etc/X11/default-display-manager
 
-  apt-get install -y gnome-shell gnome-session gnome-remote-desktop gnome-keyring gnome-settings-daemon  gnome-settings-daemon-common
-  apt-get install -y pipewire pipewire-pulse wireplumber
-
-  apt install -y gnupg keychain dbus-x11
-  # Interactive: gnome-keyring seahorse
-   # gpg --quick-gen-key ?? --batch ??
-  loginctl enable-linger ubuntu
-
-  systemctl set-default graphical.target
-  systemctl enable gdm3
-  systemctl start gdm3
-  timestamp=$(date +"%s")
-  maxTimestamp=$((timestamp + 30))
-  while [ ! -e /tmp/.X11-unix/X0 ] && [ ! -e /run/user/1000/wayland-0 ]; do
-    sleep 2
-    if [ $(date +"%s") -lt $maxTimestamp ]; then
-      echo "timed out waiting for x11!"
-      break;
-    fi
-  done
-
-  printf "[daemon]\nAutomaticLoginEnable = true\nAutomaticLogin = ubuntu\n" | sudo tee /etc/gdm3/custom.conf
-
-  machinectl shell ubuntu@.host /usr/bin/systemctl --user enable pipewire pipewire-pulse wireplumber
-  machinectl shell ubuntu@.host /usr/bin/systemctl --user start pipewire pipewire-pulse wireplumber
-
-  cp /usr/lib/systemd/user/gnome-keyring.service /etc/systemd/user/
-  machinectl shell ubuntu@.host /usr/bin/systemctl --user enable gnome-keyring.service
-  # gnome-keyring should be started automatically during login
-  # machinectl shell ubuntu@.host /usr/bin/systemctl --user start gnome-keyring.service
-
-  # didnt work 
-  # machinectl shell ubuntu@.host /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets
-  #  /run/user/1000/keyring/control: No such file or directory
-
-  # try this in gnome-shell or dbus session?
-  systemctl --user start gnome-keyring-daemon.socket
-  # check status:
-  systemctl --user status gnome-keyring
-  journalctl --user -u gnome-keyring -n 50
-
-
-
-
-  cp /usr/lib/systemd/user/gnome-remote-desktop.service /etc/systemd/user/
-  mkdir /etc/systemd/user/gnome-remote-desktop.service.d/
-  printf '[Service]\n' | sudo tee /etc/systemd/user/gnome-remote-desktop.service.d/override.conf
-  echo 'Environment="XDG_RUNTIME_DIR=/run/user/%U" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus"' | sudo tee -a /etc/systemd/user/gnome-remote-desktop.service.d/override.conf
-  
-
-  machinectl shell ubuntu@.host /usr/bin/systemctl --user enable gnome-remote-desktop.service
-  machinectl shell ubuntu@.host /usr/bin/systemctl --user start gnome-remote-desktop.service
-
-  # two issues: keyring dirs DNE, and keyring needs to be unlocked headlessly
-  
-  # machinectl shell ubuntu@.host /usr/bin/systemctl --user status gnome-keyring
-  # https://github.com/GNOME/gnome-remote-desktop/blob/main/README.md
-
-reboot
 
 
   EOL
