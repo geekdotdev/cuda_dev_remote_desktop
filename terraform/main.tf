@@ -66,16 +66,9 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
 resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_vnc" {
   security_group_id = aws_security_group.web-sg.id
   cidr_ipv4         = var.user-cidr-ipv4
-  from_port         = 5900
+  from_port         = 8443
   ip_protocol       = "tcp"
-  to_port           = 5900
-}
-resource "aws_vpc_security_group_ingress_rule" "allow_remote_desktop_rdp" {
-  security_group_id = aws_security_group.web-sg.id
-  cidr_ipv4         = var.user-cidr-ipv4
-  from_port         = 3389
-  ip_protocol       = "tcp"
-  to_port           = 3389
+  to_port           = 8443
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_ssl_out" {
@@ -218,6 +211,8 @@ resource "aws_instance" "public_linux" {
   apt install -y ubuntu-desktop gdm3 mesa-utils
   cat /etc/X11/default-display-manager
 
+  
+  reboot
 
 
   EOL
