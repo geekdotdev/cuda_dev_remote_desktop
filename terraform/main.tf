@@ -207,11 +207,16 @@ resource "aws_instance" "public_linux" {
   
   # java -version
   apt update
-  apt upgrade
-  # apt install xserver-xorg-dev xutils-dev
+  sleep 10
+  apt upgrade -y
+  
 
   # apt install -y systemd-container net-tools
-  apt install -y ubuntu-desktop gdm3 mesa-utils
+  apt install -y ubuntu-desktop gdm3 mesa-utils dpkg-sig
+  apt install -y xserver-xorg-dev xutils-dev
+  # gdm3 includes mutter, so we dont need openbox
+  # apt install -y xorg openbox openbox-themes openbox-xdgmenu suckless-tools obmenu lxappearance terminator lxpanel thunar thunar-volman thunar-archive-plugin thunar-media-tags-plugin humanity-icon-theme gvfs gvfs-backends nitrogen alsa-base alsa-utils vlc numlockx light-locker wicd lxpolkit xfce4-notifyd
+
   cat /etc/X11/default-display-manager
 
   printf "[daemon]\nWaylandEnable=false\nAutomaticLoginEnable = true\nAutomaticLogin = ubuntu\n" | sudo tee /etc/gdm3/custom.conf
@@ -219,8 +224,8 @@ resource "aws_instance" "public_linux" {
   dpkg-reconfigure gdm3
   # reboot
   loginctl enable-linger ubuntu
-  systemctl get-default
-  systemctl set-default graphical.target
+  # systemctl get-default
+  # systemctl set-default graphical.target
   systemctl isolate graphical.target
   ps aux | grep X | grep -v grep
   # systemctl enable gdm3
@@ -230,8 +235,3 @@ resource "aws_instance" "public_linux" {
   reboot
   EOL
 }
- # sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') glxinfo | grep -i "opengl.*version"
- # sudo nvidia-xconfig --preserve-busid --enable-all-gpus
- 
-# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html
-# https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-linux-prereq.html
