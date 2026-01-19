@@ -208,7 +208,7 @@ resource "aws_instance" "public_linux" {
   # java -version
   apt update
   apt upgrade
-  apt install xserver-xorg-dev xutils-dev
+  # apt install xserver-xorg-dev xutils-dev
 
   # apt install -y systemd-container net-tools
   apt install -y ubuntu-desktop gdm3 mesa-utils
@@ -217,21 +217,21 @@ resource "aws_instance" "public_linux" {
   printf "[daemon]\nWaylandEnable=false\nAutomaticLoginEnable = true\nAutomaticLogin = ubuntu\n" | sudo tee /etc/gdm3/custom.conf
 
   dpkg-reconfigure gdm3
+  # reboot
   loginctl enable-linger ubuntu
   systemctl get-default
-  # systemctl set-default graphical.target
+  systemctl set-default graphical.target
   systemctl isolate graphical.target
   ps aux | grep X | grep -v grep
   # systemctl enable gdm3
   # systemctl start gdm3
   
-
+  
   reboot
- # sudo nvidia-xconfig --preserve-busid --enable-all-gpus
- # sudo systemctl isolate multi-user.target
- # sudo systemctl isolate graphical.target
-
   EOL
 }
+ # sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') glxinfo | grep -i "opengl.*version"
+ # sudo nvidia-xconfig --preserve-busid --enable-all-gpus
+ 
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html
 # https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-linux-prereq.html
