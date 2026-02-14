@@ -117,6 +117,15 @@ resource "aws_route_table" "public_rt" {
     Name = "public_rt"
   }
 }
+# resource "aws_vpc_endpoint" "s3_gateway" { Dont need for public subnet
+#  vpc_id = aws_vpc.main.id
+
+#  service_name = "com.amazonaws.${data.aws_region.current.name}.s3"
+
+#  vpc_endpoint_type = "Gateway"
+
+#  route_table_ids = [aws_route_table.public_rt.id]
+# }
 
 resource "aws_route_table_association" "public_rt_assoc_sub-pub1" {
   subnet_id      = aws_subnet.sub-pub1.id
@@ -227,7 +236,7 @@ resource "aws_instance" "public_linux" {
   # systemctl get-default
   # systemctl set-default graphical.target
   systemctl isolate graphical.target
-  ps aux | grep X | grep -v grep
+  # ps aux | grep X | grep -v grep
   # systemctl enable gdm3
   # systemctl start gdm3
   

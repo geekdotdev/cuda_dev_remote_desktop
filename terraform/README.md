@@ -91,30 +91,39 @@ https://docs.aws.amazon.com/dcv/latest/adminguide/setting-up-installing-linux-pr
 https://stackoverflow.com/questions/75680223/glx-offscreen-rendering-in-headless-system
 
 
-# sudo nvidia-xconfig --preserve-busid --enable-all-gpus
-# sudo systemctl isolate multi-user.target
-# sudo systemctl isolate graphical.target
-# sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') glxinfo | grep -i "opengl.*version"
+sudo nvidia-xconfig --preserve-busid --enable-all-gpus
+sudo systemctl isolate multi-user.target
+sudo systemctl isolate graphical.target
+sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') glxinfo | grep -i "opengl.*version"
 # uname -m
 wget https://d1uj6qtbmh3dt5.cloudfront.net/NICE-GPG-KEY
 gpg --import NICE-GPG-KEY
 wget https://d1uj6qtbmh3dt5.cloudfront.net/nice-dcv-ubuntu2204-x86_64.tgz
 dpkg-sig --verify nice-dcv-ubuntu2204-x86_64.tgz
 
-tar -xvf nice-dcv-2025.0-20103-ubuntu2204-x86_64.tgz  && cd nice-dcv-2025.0-20103-ubuntu2204-x86_64/
-sudo apt install -y ./nice-dcv-server_2025.0.20103-1_amd64.ubuntu2204.deb
-sudo apt install -y ./nice-dcv-web-viewer_2025.0.20103-1_amd64.ubuntu2204.deb
+tar -xvf nice-dcv-ubuntu2204-x86_64.tgz  && cd nice-dcv-2025.0-20103-ubuntu2204-x86_64/sudo apt install -y ./nice-dcv-server_2025.0.20103-1_amd64.ubuntu2204.deb
+sudo apt install ./nice-dcv-server_2025.0.20103-1_amd64.ubuntu2204.deb
+sudo apt install ./nice-dcv-web-viewer_2025.0.20103-1_amd64.ubuntu2204.deb
 sudo apt install ./nice-dcv-gl_2025.0.1112-1_amd64.ubuntu2204.deb
 sudo usermod -aG video dcv
 sudo apt install -y ./nice-xdcv_2025.0.688-1_amd64.ubuntu2204.deb
-sudo systemctl isolate multi-user.target
+#? nice-dcv-gnome-shell-extension_version_all.ubuntu2204
+sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') xhost | grep "SI:localuser:dcv$"
 
+sudo systemctl isolate multi-user.target
+sudo systemctl isolate graphical.target
+sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') xhost | grep "SI:localuser:dcv$"
+
+sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') xhost | grep "LOCAL:$"
+sudo systemctl isolate multi-user.target
 sudo dcvgladmin disable
 sudo dcvgladmin enable
 sudo systemctl isolate graphical.target
 sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') xhost | grep "SI:localuser:dcv$"
 sudo DISPLAY=:0 XAUTHORITY=$(ps aux | grep "X.*\-auth" | grep -v Xdcv | grep -v grep | sed -n 's/.*-auth \([^ ]\+\).*/\1/p') xhost | grep "LOCAL:$"
 
+sudo systemctl enable dcvserver
+sudo systemctl start dcvserver
 # SSO:
 # nice-dcv-gnome-shell-extension_version_all.ubuntu2204
 # GPU Sharing: sudo apt install ./nice-dcv-gl_2025.0.1112-1_amd64.ubuntu2204.deb
