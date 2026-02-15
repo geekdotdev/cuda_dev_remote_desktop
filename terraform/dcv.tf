@@ -1,7 +1,7 @@
 resource "aws_cloudformation_stack" "nice_dcv" {
   name = "nice-dcv-ubuntu"
 
-  template_body = "https://s3.amazonaws.com/cjf-epsilon-cfn/ubuntu-NICE-dcv.yaml"
+  template_url = "https://s3.amazonaws.com/cjf-epsilon-cfn/ubuntu-NICE-dcv.yaml"
 
   parameters = {
     ec2KeyPair    = var.ec2_key_pair
