@@ -4,9 +4,9 @@ output "Region" {
 }
 output "InstancePublicIp" {
   description = "instance ip address"
-  value	= resource.ec2Instance.public_linux.public_ip
+  value	= resource.aws_instance.ec2Instance.public_ip
 }
 output "InstancePublicDns" {
   description = "instance ip address"
-  value	= resource.ec2Instance.public_linux.public_dns
+  value	= resource.aws_instance.ec2Instance.public_dns
 }

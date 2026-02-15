@@ -35,3 +35,19 @@ resource "aws_cloudformation_stack" "nice_dcv" {
 output "dcv_stack_outputs" {
   value = aws_cloudformation_stack.nice_dcv.outputs
 }
+
+output "ec2_instance_id" {
+  value = aws_cloudformation_stack.nice_dcv.outputs["EC2instanceID"]
+}
+
+output "webmin_url" {
+  value = aws_cloudformation_stack.nice_dcv.outputs["WebminUrl"]
+}
+
+output "aga_console" {
+  value = aws_cloudformation_stack.nice_dcv.outputs["AGAconsole"]
+}
+
+output "cloudfront_url" {
+  value = aws_cloudformation_stack.nice_dcv.outputs["CloudFrontUrl"]
+}
