@@ -1,7 +1,7 @@
 resource "aws_cloudformation_stack" "nice_dcv" {
   name = "nice-dcv-ubuntu"
 
-  template_body = file("${path.module}/Ubuntu-NICE-dcv.yaml")
+  template_body = file("${path.module}/ubuntu-NICE-dcv.yaml")
 
   parameters = {
     ec2KeyPair    = var.ec2_key_pair
