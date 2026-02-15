@@ -25,7 +25,7 @@ resource "aws_cloudformation_stack" "nice_dcv" {
     ec2TerminationProtection = "No"
   }
 
-  capabilities = ["CAPABILITY_IAM"]
+  capabilities = ["CAPABILITY_IAM", "CAPABILITY_AUTO_EXPAND"]
 
   tags = {
     Name = "nice-dcv-ubuntu"
