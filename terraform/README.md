@@ -1,5 +1,40 @@
  
-  ## ssh:
+##
+First request quota increase of G6 instance type stating your application and wait for approval
+
+Route 1: Subscribe to a NICE image.
+Route 2: Run one of the given CloudFormation templates with a compatible AMI
+Route 3: Build your own server from scratch with remote desktop.
+Route 4: Emulate x86 and run a Deep Learning Container
+
+Route 1: 
+munney solves your problem? 
+
+Route 2:
+Pick a DCV cloudformation template:
+https://github.com/aws-samples/amazon-ec2-nice-dcv-samples/tree/main/cfn
+
+Note almost all DVC instance types are arm64 and cuda is exclusively x86_64
+
+Pick an intance type:
+g6.xlarge is a single GPU instance with Arch x86_64 CPU
+
+Pick a Deep Learning AMI:
+https://docs.aws.amazon.com/dlami/latest/devguide/choose-dlami.html
+https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html#appendix-ami-release-notes-gpu
+https://docs.aws.amazon.com/dlami/latest/devguide/aws-deep-learning-x86-base-with-single-cuda-ami-ubuntu-22-04.html
+
+aws ec2 describe-images --region us-west-1 --owners amazon --filters 'Name=name,Values=Deep Learning Base AMI with Single CUDA (Ubuntu 22.04) ????????' 'Name=state,Values=available' --query 'reverse(sort_by(Images, &CreationDate))[:1].ImageId' --profile AdministratorAccess-339713066603
+
+ami-032ac6b2facca4291
+ami-072dbc9306f0350fc - DIDN"T work because the tf variable isn't getting passed into CFN.
+CFN is deciding the AMI from SSM
+
+Route 3:
+Good Luck!
+
+
+## ssh:
   # set a secret (if you know the expected key) from ssh:
   # sudo machinectl shell ubuntu@.host /usr/bin/secret-tool store --label='test' foo bar
  echo "YourKeyringPassword" | sudo machinectl shell ubuntu@.host /usr/bin/gnome-keyring-daemon --unlock --components=secrets

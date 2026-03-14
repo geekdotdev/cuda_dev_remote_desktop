@@ -32,6 +32,7 @@ Metadata:
           - osVersion
           - instanceType
           - ec2TerminationProtection
+          - ec2ImageId
       - Label:
           default: DCV
         Parameters:
@@ -2554,60 +2555,7 @@ Resources:
               owner: "root"
               group: "root"
     Properties:
-      ImageId: # https://ubuntu.com/server/docs/cloud-images/amazon-ec2 https://ubuntu.com/blog/ubuntu-pro-is-now-part-of-the-aws-ec2-console
-        !If [
-          useUbuntu2404x86,
-          "{{resolve:ssm:/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id}}",
-          !If [
-            useUbuntu2404arm64,
-            "{{resolve:ssm:/aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id}}",
-            !If [
-              useUbuntu2204x86,
-              "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-              !If [
-                useUbuntu2204arm64,
-                "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/arm64/hvm/ebs-gp2/ami-id}}",
-                !If [
-                  useUbuntu2004x86,
-                  "{{resolve:ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-                  !If [
-                    useUbuntu1804x86,
-                    "{{resolve:ssm:/aws/service/canonical/ubuntu/server/18.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-                    !If [
-                      useUbuntu1804arm64,
-                      "{{resolve:ssm:/aws/service/canonical/ubuntu/server/18.04/stable/current/arm64/hvm/ebs-gp2/ami-id}}",
-                      !If [
-                        useUbuntuPro2404x86,
-                        "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id}}",
-                        !If [
-                          useUbuntuPro2404arm64,
-                          "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id}}",
-                          !If [
-                            useUbuntuPro2204x86,
-                            "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-                            !If [
-                              useUbuntuPro2204arm64,
-                              "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/22.04/stable/current/arm64/hvm/ebs-gp2/ami-id}}",
-                              !If [
-                                useUbuntuPro2004x86,
-                                "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-                                !If [
-                                  useUbuntuPro1804x86,
-                                  "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/18.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
-                                  "{{resolve:ssm:/aws/service/canonical/ubuntu/pro-server/18.04/stable/current/arm64/hvm/ebs-gp2/ami-id}}",
-                                ],
-                              ],
-                            ],
-                          ],
-                        ],
-                      ],
-                    ],
-                  ],
-                ],
-              ],
-            ],
-          ],
-        ]
+      ImageId: !Ref ec2ImageId
       InstanceType: !Ref instanceType
       IamInstanceProfile: !Ref instanceProfile
       KeyName: !Ref ec2KeyPair

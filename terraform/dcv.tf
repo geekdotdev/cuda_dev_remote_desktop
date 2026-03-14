@@ -6,6 +6,7 @@ resource "aws_cloudformation_stack" "nice_dcv" {
   parameters = {
     ec2KeyPair    = var.ec2_key_pair
     instanceType  = var.ec2_instance_type
+    ec2ImageId    = var.ec2_image_id
     vpcID         = aws_vpc.main.id
     subnetID      = aws_subnet.sub-pub1.id
     ingressIPv4   = var.user-cidr-ipv4

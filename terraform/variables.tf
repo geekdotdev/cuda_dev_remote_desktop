@@ -15,7 +15,7 @@ variable "ec2_key_pair" {
   description = "SSH Key"
   type = string
 }
-variable "instance_ami" {
+variable "ec2_image_id" {
   description = "AMI"
   type = string
 }
