@@ -83,6 +83,8 @@ Metadata:
           - enableR53acmeSupport
 
     ParameterLabels:
+      ec2ImageId:
+        default: AMI ID
       ec2Name:
         default: "EC2 instance name"
       ec2KeyPair:
@@ -151,6 +153,8 @@ Metadata:
         default: "Enable Route 53 ACME protocol DNS-01 challenge support"
 
 Parameters:
+  ec2ImageId:
+    Type: String
   osVersion:
     Type: String
     #Description: Version and processor architecture
